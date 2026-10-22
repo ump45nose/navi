@@ -123,11 +123,10 @@ test their modifications but can be used by end users who want to build their ow
     make install
     ```
 
-You can specify the binary directory with:
-
-```bash
-make BIN_DIR=/usr/local/bin install
-```
+`make install` runs `cargo install --path .`, which puts the binary in
+Cargo's bin directory: `$CARGO_HOME/bin`, or `~/.cargo/bin` by default.
+`BIN_DIR` is read only by `scripts/install` (see the section above), so
+`make BIN_DIR=/usr/local/bin install` does not move the binary.
 
 ## Compile time environment variables
 
