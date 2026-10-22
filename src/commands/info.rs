@@ -46,7 +46,8 @@ impl Runnable for Input {
             Info::CheatsPath => println!("{}", &filesystem::default_cheat_pathbuf()?.to_string()),
             Info::ConfigPath => println!("{}", &filesystem::default_config_pathbuf()?.to_string()),
 
-            // Here should be the default values (computed at compile time)
+            // Default values, resolved at runtime from the platform directories;
+            // the NAVI_PATH/NAVI_CONFIG compile-time values can override them
             Info::DefaultCheatsPath => println!("{}", &filesystem::default_cheat_pathbuf()?.to_string()),
             Info::DefaultConfigPath => println!("{}", &filesystem::default_config_pathbuf()?.to_string()),
         }
