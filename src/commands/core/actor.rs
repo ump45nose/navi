@@ -9,6 +9,7 @@ use crate::prelude::*;
 use crate::structures::cheat::{Suggestion, VariableMap};
 use crate::structures::item::Item;
 use shell::EOF;
+use std::io::Write;
 use std::process::Stdio;
 
 fn query_with_override(query: Option<String>, query_override: Option<String>) -> Option<String> {
@@ -243,7 +244,13 @@ pub fn act(
 
     match CONFIG.action() {
         Action::Print => {
-            println!("{interpolated_snippet}");
+            let stdout = std::io::stdout();
+            let mut lock = stdout.lock();
+            if let Err(e) = writeln!(lock, "{interpolated_snippet}") {
+                if e.kind() != std::io::ErrorKind::BrokenPipe {
+                    return Err(e.into());
+                }
+            }
         }
         Action::Execute => match key {
             "ctrl-y" => {
