@@ -244,12 +244,10 @@ pub fn act(
 
     match CONFIG.action() {
         Action::Print => {
-            let stdout = std::io::stdout();
-            let mut lock = stdout.lock();
-            if let Err(e) = writeln!(lock, "{interpolated_snippet}") {
-                if e.kind() != std::io::ErrorKind::BrokenPipe {
-                    return Err(e.into());
-                }
+            // println! panics when stdout is closed (e.g. `navi --print | head`).
+            // That is an OS-level condition, so log it instead.
+            if let Err(e) = writeln!(std::io::stdout(), "{interpolated_snippet}") {
+                warn!("failed to print the snippet: {e}");
             }
         }
         Action::Execute => match key {
